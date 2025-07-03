@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portal de Seguimiento CMA CGM</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --text: #333;
+      --header-bg: #003366;
+      --btn-bg: #0055a5;
+      --btn-hover: #003f7d;
+      --container-bg: white;
+    }
+    body.dark-mode {
+      --bg: #111;
+      --text: #eee;
+      --header-bg: #222;
+      --btn-bg: #444;
+      --btn-hover: #666;
+      --container-bg: #1e1e1e;
+    }
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: var(--header-bg);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    header img {
+      height: 50px;
+      vertical-align: middle;
+    }
+    .toggle-mode {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: var(--btn-bg);
+      border: none;
+      color: white;
+      padding: 10px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 30px auto;
+      background: var(--container-bg);
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    input[type="text"] {
+      padding: 12px;
+      width: 70%;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-right: 10px;
+      font-size: 16px;
+    }
+    button.track-btn {
+      padding: 12px 20px;
+      background-color: var(--btn-bg);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button.track-btn:hover {
+      background-color: var(--btn-hover);
+    }
+    .map-container {
+      margin-top: 30px;
+    }
+    iframe {
+      width: 100%;
+      height: 450px;
+      border: 0;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body onload="autoTrack()">
+  <header>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/CMA_CGM_logo.svg/2560px-CMA_CGM_logo.svg.png" alt="CMA CGM Logo" />
+    <h1>Portal de Seguimiento</h1>
+    <button class="toggle-mode" onclick="toggleDarkMode()">Modo Oscuro</button>
+  </header>
+
+  <div class="container">
+    <h2>Rastrea tu paquete</h2>
+    <input type="text" id="trackingInput" placeholder="Introduce tu código de seguimiento">
+    <button class="track-btn" onclick="track()">Rastrear</button>
+
+    <div id="result" style="display:none;">
+      <h3>Ruta desde el Aeropuerto hasta el destino</h3>
+      <div class="map-container">
+        <iframe 
+          src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d7953590.169903957!2d-74.13848869757962!3d1.6126649999999965!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m19!3e0!4m5!1s0x8e3f9a7fcfffffff%3A0xf7c3d5c848731dea!2sAeropuerto%20Internacional%20El%20Dorado%2C%20Bogot%C3%A1%2C%20Colombia!3m2!1d4.7013896!2d-74.1468945!4m5!1s0x8e246343fb6ec74f%3A0x99172905b47a5b4b!2sFlorencia%2C%20Caquet%C3%A1%2C%20Colombia!3m2!1d1.6143785!2d-75.6138624!5e0!3m2!1ses-419!2sco!4v1719932342343!5m2!1ses-419!2sco" 
+          allowfullscreen="" loading="lazy">
+        </iframe>
+      </div>
+    </div>
+  </div>
+
+  <audio id="pingSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_5cd75dcf46.mp3" preload="auto"></audio>
+
+  <script>
+    const realTrackingCode = "CMA2025CO9822FL";
+
+    function track() {
+      const input = document.getElementById("trackingInput").value.trim().toUpperCase();
+      const result = document.getElementById("result");
+
+      if (input === realTrackingCode) {
+        result.style.display = "block";
+        document.getElementById("pingSound").play();
+      } else {
+        alert("Código inválido. Inténtalo de nuevo.");
+        result.style.display = "none";
+      }
+    }
+
+    function autoTrack() {
+      setInterval(() => {
+        const input = document.getElementById("trackingInput").value.trim().toUpperCase();
+        if (input === realTrackingCode) {
+          track();
+        }
+      }, 10000);
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark-mode");
+    }
+  </script>
+</body>
+</html>
